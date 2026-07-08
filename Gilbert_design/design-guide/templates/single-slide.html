@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><title>보고</title><style>
+.rpt{--blue:#0000FF;--font:'Malgun Gothic','맑은 고딕',sans-serif;font-family:var(--font);background:#ededed;padding:1px 0;max-width:none}.rpt *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all}.rpt .stage{position:relative;width:1280px;max-width:none;height:720px;background:#fff;overflow:hidden;margin:20px auto;display:flex;flex-direction:column}.rpt .frame{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:15px 30px 0}.rpt .title{font-size:30px;font-weight:700;color:#000;margin-left:20px;padding-right:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rpt .rule-top{width:1209px;height:4px;background:#4F81BD;margin:11px auto 0}.rpt .gov{font-size:24px;font-weight:700;color:#000;margin:11px 0 0 20px;white-space:nowrap}.rpt .sub{font-size:18px;color:#000;margin:16px 0 0 36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rpt .foot{font-size:12px;color:#888;margin:2px 0 0 36px}.rpt .body{display:flex!important;flex-direction:row!important;flex-wrap:nowrap;gap:32px;margin:52px 27px 0;flex:1;min-height:0}.rpt .body.free{display:block!important;margin:32px 30px 0}.rpt .body.free .panel{flex:none;width:100%;height:100%;border:0;overflow:hidden}.rpt .body.free .panel~.panel{display:none}.rpt .body.free .ptitle{display:none}.rpt .body.free .pbody{padding:0;height:100%;overflow:hidden}.rpt .panel{flex:1;position:relative;border:1px solid #ccc;min-width:0;min-height:0;overflow:visible}.rpt .pbody{padding:30px 24px 26px;height:100%;overflow:hidden}.rpt .ptitle{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#fff;padding:0 14px;font-size:22px;font-weight:700;color:#000;white-space:nowrap;max-width:none;z-index:6;line-height:1.2}.rpt .ptitle::before{content:"【 "}.rpt .ptitle::after{content:" 】"}.rpt .l1{font-size:18px;color:#000;margin-top:14px;font-weight:700}.rpt .l2{font-size:16px;color:#000;margin:8px 0 0 18px}.rpt .l3{font-size:14px;color:#000;margin:6px 0 0 34px}.rpt .l1,.rpt .l2,.rpt .l3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rpt .b{color:var(--blue)}.rpt .t{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px}.rpt .t th,.rpt .t td{border:1px solid #ccc;padding:5px 8px;color:#000;text-align:center}.rpt .t th{background:#f2f2f2;color:#666}.rpt .num{text-align:right}.rpt .chart{display:flex;align-items:flex-end;gap:18px;height:140px;margin-top:18px}.rpt .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}.rpt .bar{width:60%;background:#DCE6F2}.rpt .col.v .bar{background:#376092}.rpt .cap{font-size:12px;color:#666;margin-top:4px}.rpt .flow{display:flex;align-items:center;gap:8px;margin-top:18px}.rpt .step{flex:1;padding:10px 6px;text-align:center;font-size:13px;color:#000;background:#DCE6F2}.rpt .step.v{background:#376092;color:#fff;font-weight:700}.rpt .step.g{background:#e9e9e9}.rpt .ar{color:#666}.rpt .conf{position:absolute;top:15px;right:30px;width:95px;height:19px;border:1px solid #F00;color:#F00;font-size:12px;text-align:center;line-height:17px;cursor:pointer;z-index:50}.rpt .footer{flex-shrink:0;height:76px;position:relative}.rpt .endnote{position:absolute;left:30px;right:30px;top:22px;font-size:12px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rpt .rule-bot{position:absolute;left:20px;right:20px;height:1px;background:#ccc;top:38px}.rpt .pageno{position:absolute;left:0;right:0;bottom:0;height:38px;text-align:center;line-height:38px;font-size:12px;color:#888}.rpt .org{position:absolute;right:30px;bottom:0;height:38px;line-height:38px;font-size:12px;color:#888}.rpt .pre{background:#f5f5f5;border-left:3px solid #376092;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;color:#000;white-space:pre-wrap;margin-top:12px}.rpt .img{background:#eef2f7;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;overflow:hidden;margin-top:12px}.rpt .img img{width:100%;height:100%;object-fit:contain;display:block}.rpt .deck{width:1280px;max-width:none;margin:0 auto}.rpt .deck>.stage{margin:20px auto}.rpt.fs,.rpt:fullscreen,.rpt:-webkit-full-screen{max-width:none;background:#000;padding:0;margin:0;display:flex;align-items:center;justify-content:center;overflow:hidden}.rpt.fs .stage,.rpt:fullscreen .stage,.rpt:-webkit-full-screen .stage{margin:0}.rpt .nav{position:absolute;top:0;bottom:0;width:10%;z-index:45;cursor:pointer}.rpt .nav.prev{left:0}.rpt .nav.next{right:0}
+</style></head><body>
+<!-- 단일 면 빈 골격. 대괄호 [ ] 안의 텍스트를 실제 내용으로 교체하세요. -->
+<div class="rpt">
+ <div class="stage">
+  <div class="frame">
+   <div class="title">[키워드] 제목</div>
+   <div class="rule-top"></div>
+   <div class="gov">□ [목적·효과] 위해 [조치] 추진</div>
+   <div class="sub">- [범위·근거·실행방향 한 줄]</div>
+   <div class="body">
+    <div class="panel">
+     <div class="ptitle">[좌 패널 제목]</div>
+     <div class="pbody">
+      <div class="l1">□ [핵심 근거]</div>
+      <table class="t">
+       <thead><tr><th>[항목]</th><th>[현재]</th><th>[목표]</th></tr></thead>
+       <tbody>
+        <tr><td>[지표]</td><td class="num">[값]</td><td class="num">[값]</td></tr>
+        <tr><td>[지표]</td><td class="num">[값]</td><td class="num">[값]</td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="panel">
+     <div class="ptitle">[우 패널 제목]</div>
+     <div class="pbody">
+      <div class="l1">□ [핵심 근거]</div>
+      <div class="l2">- [세부 근거]</div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="conf">대 외 비</div>
+  <div class="footer">
+   <div class="endnote">* 기준: [확인 필요] / 약어 Full Name</div>
+   <div class="rule-bot"></div>
+   <div class="pageno">1 / 1</div>
+   <div class="org">YYYY.MM.DD / OO팀 / 책임 OOO / 작성 OOO</div>
+  </div>
+ </div>
+</div>
+<script>
+(function () {
+  var root = document.querySelector('.rpt');
+  if (!root) return;
+  var stages = [].slice.call(root.querySelectorAll('.stage'));
+  var i = 0;
+  function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement; }
+  function availWidth() {
+    var p = root.parentElement;
+    while (p && p.clientWidth === 0) p = p.parentElement;
+    var w = p ? p.clientWidth : root.clientWidth;
+    return w || 1280;
+  }
+  function render() {
+    var fs = fsEl() === root;
+    var avail = fs ? innerWidth : availWidth();
+    stages.forEach(function (s, j) {
+      s.style.display = (j === i) ? 'flex' : 'none';
+      if (fs) {
+        var k = Math.min(innerWidth / 1280, innerHeight / 720);
+        s.style.transformOrigin = 'center';
+        s.style.transform = (j === i) ? 'scale(' + k + ')' : '';
+        s.style.marginBottom = '';
+      } else {
+        var k2 = Math.min(1, avail / 1280);
+        s.style.transformOrigin = 'top left';
+        s.style.transform = (k2 < 1) ? 'scale(' + k2 + ')' : '';
+        s.style.marginBottom = (k2 < 1) ? (720 * k2 - 720) + 'px' : '';
+      }
+    });
+  }
+  function go(n) { if (stages.length) { i = (n + stages.length) % stages.length; render(); } }
+  function toggleFs() {
+    try {
+      if (fsEl() === root) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+    } catch (e) {}
+  }
+  if (stages.length > 1) {
+    stages.forEach(function (s) {
+      [['prev', -1], ['next', 1]].forEach(function (d) {
+        var z = document.createElement('div');
+        z.className = 'nav ' + d[0];
+        z.addEventListener('click', function (e) { e.stopPropagation(); go(i + d[1]); });
+        s.appendChild(z);
+      });
+    });
+  }
+  root.tabIndex = -1;
+  root.addEventListener('mousedown', function () { try { root.focus(); } catch (e) {} });
+  root.addEventListener('click', function (e) {
+    if (e.target.closest('.conf')) { e.preventDefault(); e.stopPropagation(); toggleFs(); }
+  });
+  function onKey(e) {
+    var el = e.target;
+    if (el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable)) return;
+    var k = e.key;
+    if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(stages.length - 1); }
+    else if (k === 'f' || k === 'F') { e.preventDefault(); toggleFs(); }
+  }
+  root.addEventListener('keydown', onKey);
+  document.addEventListener('keydown', function (e) { if (fsEl() === root) onKey(e); });
+  if (stages.length > 1) {
+    var wheelLock = false;
+    root.addEventListener('wheel', function (e) {
+      if (fsEl() !== root && !root.contains(document.activeElement)) return;
+      e.preventDefault();
+      if (wheelLock) return;
+      wheelLock = true; setTimeout(function () { wheelLock = false; }, 450);
+      go(i + (e.deltaY > 0 ? 1 : -1));
+    }, { passive: false });
+  }
+  document.addEventListener('fullscreenchange', render);
+  document.addEventListener('webkitfullscreenchange', render);
+  window.addEventListener('resize', render);
+  render();
+})();
+</script>
+</body></html>
