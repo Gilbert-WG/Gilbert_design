@@ -1,7 +1,264 @@
-# 디자인 시스템 — 틀 (CSS·DOM 골격·동작 스크립트) **이 문서의 CSS·DOM 구조·스크립트는 그대로 재사용합니다.** 클래스 이름을 새로 만들거나, 중첩 구조를 바꾸거나, 값을 "더 낫게" 다듬지 않습니다. 틀을 바꾸면 잘림·깨짐이 생깁니다. 내용(문장)만 채우는 자리는 아래에서 `[ ]`로 표시합니다. ## 0. 캔버스 규격 - 고정 1280×720px (16:9), 슬라이드 1장 = `.stage` 1개. - 본문은 항상 좌우 다단 — `.body` 안에 `.panel`을 형제로 2~3개 둡니다(레이아웃별로 아래 §4). `.body`를 여러 개 만들거나 `.body` 없이 `.panel`만 두면 좌우 배치가 무너져 위아래로 쌓입니다. - 외부 리소스(CDN, 웹폰트, 원격 이미지 링크)를 쓰지 않습니다 — 인터넷 연결 없이도, 파일을 어디로 옮겨도 그대로 열려야 합니다. 사진·스크린샷이 꼭 필요하면 base64로 인코딩해 `<img>`에 직접 심는 것은 허용합니다(§4 `.img`) — "외부 링크"만 금지이고 "이미지 자체"가 금지는 아닙니다. - 비교·추이·절차처럼 글로만 쓰면 전달이 늦는 내용은 표(`.t`)·차트(`.chart`)·플로우(`.flow`)로 바꿔 씁니다. 이 셋은 예외적으로 쓰는 도구가 아니라 **기본 도구**입니다 — 아래 §4 참고. - 표는 반드시 `<table class="t">` + `<thead><tr><th>` + `<tbody><tr><td>` 태그로 만듭니다. `<div>`로 표를 흉내 내면 표로 인식되지 않고 줄글처럼 보입니다. - 텍스트 요소(`.title`/`.gov`/`.sub`/`.l1`/`.l2`/`.l3`/`.ptitle`)는 **1요소 = 1줄**입니다. 길면 `<br>`로 줄바꿈하지 말고, 같은 클래스의 요소를 하나 더 만들어 나눕니다. 넘치는 내용은 줄이거나 슬라이드를 나누는 것으로 해결합니다(줄임표·잘림 방치는 미완성으로 간주). ## 1. 문서 골격 ```html <!DOCTYPE html> <html lang="ko"><head><meta charset="UTF-8"><title>보고 슬라이드</title><style> /* 아래 §2 CSS 전체를 그대로 */ </style></head><body> <!-- 아래 §3 DOM 본문 --> /* 아래 §5 스크립트 전체를 그대로, body 끝에 1개만 */ </body></html> ``` CSS는 `<head><style>` 한 블록에, 스크립트는 `<body>` 끝 `` 한 블록에만 둡니다(분산· 인라인 style 전환 금지). ## 2. CSS (그대로 복사) ```css .rpt{--blue:#0000FF;--font:'Malgun Gothic','맑은 고딕',sans-serif;font-family:var(--font);background:#ededed;padding:1px 0;max-width:none} .rpt *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all} .rpt .stage{position:relative;width:1280px;max-width:none;height:720px;background:#fff;overflow:hidden;margin:20px auto;display:flex;flex-direction:column} .rpt .frame{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:15px 30px 0} .rpt .title{font-size:30px;font-weight:700;color:#000;margin-left:20px;padding-right:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .rpt .rule-top{width:1209px;height:4px;background:#4F81BD;margin:11px auto 0} .rpt .gov{font-size:24px;font-weight:700;color:#000;margin:11px 0 0 20px;white-space:nowrap} .rpt .foot{font-size:13px;color:#000;margin:4px 0 0 36px} .rpt .sub{font-size:21px;color:#000;margin:12px 0 0 36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .rpt .detail{font-size:19px;color:#000;margin:6px 0 0 52px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .rpt .body{display:flex!important;flex-direction:row!important;flex-wrap:nowrap;gap:32px;margin:52px 27px 0;flex:1;min-height:0} .rpt .body.free{display:block!important;margin:32px 30px 0} .rpt .body.free .panel{flex:none;width:100%;height:100%;overflow:hidden} .rpt .body.free .panel~.panel{display:none} .rpt .body.free .ptitle{display:none} .rpt .body.free .pbody{padding:0;height:100%;overflow:hidden;border:none} .rpt .panel{flex:1;position:relative;min-width:0;min-height:0;overflow:visible} .rpt .pbody{border:1px solid #ccc;padding:24px 20px 26px;height:100%;overflow:hidden} .rpt .ptitle{display:flex;align-items:center;font-size:22px;font-weight:700;color:#000;white-space:nowrap;margin:0 0 10px} .rpt .ptitle .txt::before{content:"[ "} .rpt .ptitle .txt::after{content:" ]"} .rpt .ptitle .rule{flex:1;height:1px;background:#999;margin-left:10px} .rpt .l1{font-size:18px;color:#000;margin-top:14px;font-weight:700} .rpt .l2{font-size:16px;color:#000;margin:8px 0 0 18px} .rpt .l3{font-size:14px;color:#000;margin:6px 0 0 34px} .rpt .l1,.rpt .l2,.rpt .l3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .rpt .b{color:var(--blue)} .rpt .t{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px} .rpt .t th,.rpt .t td{border:1px solid #ccc;padding:5px 8px;color:#000;text-align:center} .rpt .t th{background:#f2f2f2;color:#666} .rpt .num{text-align:right} .rpt .chart{display:flex;align-items:flex-end;gap:18px;height:140px;margin-top:18px} .rpt .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%} .rpt .bar{width:60%;background:#DCE6F2} .rpt .col.v .bar{background:#376092} .rpt .cap{font-size:12px;color:#666;margin-top:4px} .rpt .flow{display:flex;align-items:center;gap:8px;margin-top:18px} .rpt .step{flex:1;padding:10px 6px;text-align:center;font-size:13px;color:#000;background:#DCE6F2} .rpt .step.v{background:#376092;color:#fff;font-weight:700} .rpt .step.g{background:#e9e9e9} .rpt .ar{color:#666} .rpt .badge{position:absolute;top:15px;right:30px;width:95px;height:19px;border:1px solid #F00;color:#F00;font-size:12px;text-align:center;line-height:17px;cursor:pointer;z-index:50} .rpt .groupname{position:absolute;top:36px;right:30px;font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap} .rpt .footer{flex-shrink:0;height:76px;position:relative} .rpt .footer::before{content:"[회사 슬로건]";position:absolute;left:30px;bottom:0;height:38px;line-height:38px;font-size:13px;font-weight:700;color:var(--blue)} .rpt .endnote{position:absolute;left:30px;right:30px;top:22px;font-size:12px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .rpt .rule-bot{position:absolute;left:20px;right:20px;height:1px;background:#ccc;top:38px} .rpt .pageno{position:absolute;left:0;right:0;bottom:0;height:38px;text-align:center;line-height:38px;font-size:12px;color:#888} .rpt .org{position:absolute;right:30px;bottom:0;height:38px;line-height:38px;font-size:12px;color:#888} .rpt .pre{background:#f5f5f5;border-left:3px solid #376092;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;color:#000;white-space:pre-wrap;margin-top:12px} .rpt .img{background:#eef2f7;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;overflow:hidden;margin-top:12px} .rpt .img img{width:100%;height:100%;object-fit:contain;display:block} .rpt .deck{width:1280px;max-width:none;margin:0 auto} .rpt .deck>.stage{margin:20px auto} .rpt.fs,.rpt:fullscreen,.rpt:-webkit-full-screen{max-width:none;background:#000;padding:0;margin:0;display:flex;align-items:center;justify-content:center;overflow:hidden} .rpt.fs .stage,.rpt:fullscreen .stage,.rpt:-webkit-full-screen .stage{margin:0} .rpt .nav{position:absolute;top:0;bottom:0;width:10%;z-index:45;cursor:pointer} .rpt .nav.prev{left:0} .rpt .nav.next{right:0} ```
+# 디자인 시스템 — 틀 (CSS·DOM 골격·동작 스크립트)
 
+**이 문서의 CSS·DOM 구조·스크립트는 그대로 재사용합니다.** 클래스 이름을 새로 만들거나, 중첩 구조를 바꾸거나, 값을 "더 낫게" 다듬지 않습니다. 틀을 바꾸면 잘림·깨짐이 생깁니다. 내용(문장)만 채우는 자리는 아래에서 `[ ]`로 표시합니다.
 
-## 3. DOM 골격 (2단 기본형 — `[ ]`만 내용으로 교체) ```html <div class="rpt"> <div class="stage"> <div class="frame"> <div class="title">[제목]</div> <div class="rule-top"></div> <div class="gov">□ [핵심 결론 한 문장]</div> <div class="foot">* [약어·기준 각주]</div> <div class="sub">- [결론을 보강하는 근거·범위 한 줄]</div> <div class="detail">· [한 단계 더 들어간 세부 설명, 필요할 때만]</div> <div class="body"> <!-- ★ body 1개, 그 안에 panel 2개(좌·우) 형제 --> <div class="panel"> <div class="ptitle"><span class="txt">[패널1 제목]</span><span class="rule"></span></div> <div class="pbody"> <div class="l1">□ [핵심 근거]</div> <table class="t"> <thead><tr><th>[항목]</th><th>[현재]</th><th>[목표]</th></tr></thead> <tbody> <tr><td>[지표명]</td><td class="num">[값]</td><td class="num">[값]</td></tr> </tbody> </table> </div> </div> <div class="panel"> <div class="ptitle"><span class="txt">[패널2 제목]</span><span class="rule"></span></div> <div class="pbody"><div class="l1">□ [핵심 근거]</div></div> </div> </div> </div> <div class="badge">CONFIDENTIAL</div> <div class="groupname">[그룹명]</div> <div class="footer"> <div class="endnote">* 기준: [출처/산식] / 약어 Full Name</div> <div class="rule-bot"></div> <div class="pageno">- 1 / 1 -</div> <div class="org">[날짜] / [팀명] / [작성자]</div> </div> </div> </div> ``` `.badge`(예시 텍스트 "CONFIDENTIAL")는 항상 표시하고, 클릭하면 아래 스크립트가 전체화면을 토글합니다 — 별도 전체화면 버튼을 추가하지 않습니다. 텍스트는 자유롭게 바꿔도 되지만(예: "내부용", "DRAFT") 이 요소 자체를 지우지 않습니다. `.groupname`(대외비 배지 바로 아래, 우측 정렬)은 보고서마다 값이 바뀌는 자리입니다(부문/조직/ 그룹명 등). `.footer`의 좌측 하단 문구(`[회사 슬로건]`)는 CSS `content:`로 고정 삽입되므로 HTML에 별도 태그가 필요 없습니다 — 이 문구를 실제로 쓸 값으로 바꾸려면 CSS의 `.rpt .footer::before{content:"..."}` 한 곳만 고치면 되고, 모든 슬라이드에 항상 같은 자리· 같은 값으로 나타납니다(콘텐츠 작성자가 실수로 빠뜨리거나 다르게 쓸 위험이 없음). 패널 제목은 `.ptitle` 안에 `<span class="txt">텍스트</span><span class="rule"></span>` 두 자식을 그대로 유지합니다 — `.txt`의 대괄호는 CSS가 자동으로 붙이고(직접 입력 금지), `.rule`은 항상 빈 채로 두어 우측으로 뻗는 구분선 역할만 합니다. 헤더 순서는 **제목 → 거버닝 → 각주(주석) → 부연설명 → 세부설명**입니다(각주가 거버닝 바로 아래, 부연설명보다 먼저 옵니다 — 순서를 바꾸지 않습니다). `.detail`은 꼭 필요할 때만 추가하는 선택 요소입니다. ### 다단/전체활용 변형 - **3단**: `.panel`을 3개 형제로 두면 flex가 자동으로 3분할합니다(추가 CSS 불필요). - **전체활용(패널 경계선 없이 폭 전체 사용)**: `<div class="body free">` 안에 `.panel` **1개만** 둡니다. 이때 `.ptitle`·테두리는 자동으로 숨겨집니다. - **다중 슬라이드(덱)**: `.stage`를 여러 개 나열하면(선택적으로 `.deck`으로 감싸도 됨) §5 스크립트가 한 장씩 넘겨보는 뷰어로 만들어 줍니다. 각 `.stage`는 `.frame`·`.badge`·`.footer`를 각자 포함해야 합니다. ## 4. 시각화 — 전달력을 높이는 기본 도구 (제한이 아니라 권장) 글로만 8줄을 채우는 것보다, 그중 비교·추이·절차에 해당하는 부분을 표·차트·플로우로 바꾸는 편이 훨씬 빨리 읽힙니다. "내용이 단조로워 보이면" 아래 세 도구부터 검토하세요 — 사용자가 명시적으로 요청해야만 쓰는 예외 취급이 아닙니다. - **비교·정리** → 표(`.t`). 셀은 짧은 단어·숫자만, 줄바꿈 금지, 숫자 칸은 `<td class="num">`. - **수치 비교(현재 vs 목표, A안 vs B안)** → `.chart`+`.col`(강조는 `.col.v`)+`.bar`(inline `style="height:NN%"`)+`.cap`. - **절차·단계·로드맵** → `.flow`+`.step`(강조는 `.step.v`, 흐린 단계는 `.step.g`). - **실제 사진·스크린샷**(증빙 등 표·차트로 대체할 수 없는 경우) → `.img` 컨테이너에 base64 `<img>`를 직접 심습니다. 예: `<div class="img" style="aspect-ratio:16/9;height:160px"> <img src="data:image/png;base64,...."></div>`. 종횡비는 `style`의 `aspect-ratio`/`height`로 지정하고, 내부 `img{width:100%;height:100%;object-fit:contain}` 규칙이 찌그러짐을 막습니다. 한 패널에 이 넷(표/차트/플로우/이미지) 중 **최대 1개**만 텍스트 계층과 함께 둡니다 — 여러 개를 쌓으면 고정 720px 높이를 넘어 잘립니다. 표현력을 높이고 싶다고 이 상한을 깨지 말고, 대신 슬라이드를 나누세요.
+## 0. 캔버스 규격
 
+- 고정 1280×720px (16:9), 슬라이드 1장 = `.stage` 1개.
+- 본문은 항상 좌우 다단 — `.body` 안에 `.panel`을 형제로 2~3개 둡니다(레이아웃별로 아래 §4). `.body`를 여러 개 만들거나 `.body` 없이 `.panel`만 두면 좌우 배치가 무너져 위아래로 쌓입니다.
+- 외부 리소스(CDN, 웹폰트, 원격 이미지 링크)를 쓰지 않습니다 — 인터넷 연결 없이도, 파일을 어디로 옮겨도 그대로 열려야 합니다. 사진·스크린샷이 꼭 필요하면 base64로 인코딩해 `<img>`에 직접 심는 것은 허용합니다(§4 `.img`) — "외부 링크"만 금지이고 "이미지 자체"가 금지는 아닙니다.
+- 비교·추이·절차처럼 글로만 쓰면 전달이 늦는 내용은 표(`.t`)·차트(`.chart`)·플로우(`.flow`)로 바꿔 씁니다. 이 셋은 예외적으로 쓰는 도구가 아니라 **기본 도구**입니다 — 아래 §4 참고.
+- 표는 반드시 `<table class="t">` + `<thead><tr><th>` + `<tbody><tr><td>` 태그로 만듭니다. `<div>`로 표를 흉내 내면 표로 인식되지 않고 줄글처럼 보입니다.
+- 텍스트 요소(`.title`/`.gov`/`.sub`/`.l1`/`.l2`/`.l3`/`.ptitle`)는 **1요소 = 1줄**입니다. 길면 `<br>`로 줄바꿈하지 말고, 같은 클래스의 요소를 하나 더 만들어 나눕니다. 넘치는 내용은 줄이거나 슬라이드를 나누는 것으로 해결합니다(줄임표·잘림 방치는 미완성으로 간주).
 
-## 5. 동작 스크립트 (그대로 복사, `</body>` 직전) 좌/우 클릭·화살표·PageUp/Down·Space·마우스 휠로 슬라이드 이동, `.badge` 클릭으로 전체화면 토글(Esc 해제). 컨테이너가 1280px보다 좁으면 비율을 유지한 채 자동 축소됩니다. 클래스로 슬라이드를 찾아 인라인 스타일로 표시를 제어하므로 외부 CSS가 제거돼도 동작합니다. 스크립트가 막히면 모든 슬라이드가 세로로 나열되어 보입니다(빈 화면 없음). ```html (function () { var root = document.querySelector('.rpt'); if (!root) return; var stages = [].slice.call(root.querySelectorAll('.stage')); var i = 0; function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement; } function availWidth() { var p = root.parentElement; while (p && p.clientWidth === 0) p = p.parentElement; var w = p ? p.clientWidth : root.clientWidth; return w || 1280; } function render() { var fs = fsEl() === root; var avail = fs ? innerWidth : availWidth(); stages.forEach(function (s, j) { s.style.display = (j === i) ? 'flex' : 'none'; if (fs) { var k = Math.min(innerWidth / 1280, innerHeight / 720); s.style.transformOrigin = 'center'; s.style.transform = (j === i) ? 'scale(' + k + ')' : ''; s.style.marginBottom = ''; } else { var k2 = Math.min(1, avail / 1280); s.style.transformOrigin = 'top left'; s.style.transform = (k2 < 1) ? 'scale(' + k2 + ')' : ''; s.style.marginBottom = (k2 < 1) ? (720 * k2 - 720) + 'px' : ''; } }); } function go(n) { if (stages.length) { i = (n + stages.length) % stages.length; render(); } } function toggleFs() { try { if (fsEl() === root) (document.exitFullscreen || document.webkitExitFullscreen).call(document); else (root.requestFullscreen || root.webkitRequestFullscreen).call(root); } catch (e) {} } if (stages.length > 1) { stages.forEach(function (s) { [['prev', -1], ['next', 1]].forEach(function (d) { var z = document.createElement('div'); z.className = 'nav ' + d[0]; z.addEventListener('click', function (e) { e.stopPropagation(); go(i + d[1]); }); s.appendChild(z); }); }); } root.tabIndex = -1; root.addEventListener('mousedown', function () { try { root.focus(); } catch (e) {} }); root.addEventListener('click', function (e) { if (e.target.closest('.badge')) { e.preventDefault(); e.stopPropagation(); toggleFs(); } }); function ON-KEY(e) { var el = e.target; if (el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable)) return; var k = e.key; if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown') { e.preventDefault(); go(i + 1); } else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); } else if (k === 'Home') { e.preventDefault(); go(0); } else if (k === 'End') { e.preventDefault(); go(stages.length - 1); } else if (k === 'f' || k === 'F') { e.preventDefault(); toggleFs(); } } root.addEventListener('keydown', ON-KEY); document.addEventListener('keydown', function (e) { if (fsEl() === root) ON-KEY(e); }); if (stages.length > 1) { var wheelLock = false; root.addEventListener('wheel', function (e) { if (fsEl() !== root && !root.contains(document.activeElement)) return; e.preventDefault(); if (wheelLock) return; wheelLock = true; setTimeout(function () { wheelLock = false; }, 450); go(i + (e.deltaY > 0 ? 1 : -1)); }, { passive: false }); } document.addEventListener('fullscreenchange', render); document.addEventListener('webkitfullscreenchange', render); window.addEventListener('resize', render); render(); })(); ``` ## 6. 출력 전 자가 검증 - CSS가 `<head><style>` 1블록, 스크립트가 `<body>` 끝 1블록(둘 다 원문 그대로), class명 정확. - 표는 `<table class="t">`(+`th`/`td`) 태그인가 — `<div class="t">`면 표로 안 보임. - 본문이 좌우 다단 유지(패널이 위아래로 쌓이지 않음), `.stage` 1280×720, 화면 밖으로 나간 요소 없음, `.footer` 영역을 본문이 침범하지 않음. - 제목·거버닝·부연·세부·`.l1~.l3` 각 한 줄이 잘리지 않는가(아래 CONTENT_GUIDE.md의 글자수 한도 참고). 넘치면 `...`·생략이 아니라 더 짧게 다시 쓰거나 슬라이드를 나눈다. - 각 패널 내용이 패널 높이를 넘지 않는가(패널 하단이 `.footer` 선에 걸려 잘리지 않는가). 넘치면 항목을 줄이거나 슬라이드를 나눈다(폰트 축소·말줄임 금지). - `.badge`·`.groupname`·`.footer`의 브랜드 슬로건(`::before`)이 모두 표시되는가(하나라도 숨겨지거나 다른 요소에 가려지지 않았는가). 헤더 순서가 제목→거버닝→각주→부연→세부인가.
+## 1. 문서 골격
+
+```html
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><title>보고 슬라이드</title><style>
+/* 아래 §2 CSS 전체를 그대로 */
+</style></head><body>
+<!-- 아래 §3 DOM 본문 -->
+<script>
+/* 아래 §5 스크립트 전체를 그대로, body 끝에 1개만 */
+</script>
+</body></html>
+```
+
+CSS는 `<head><style>` 한 블록에, 스크립트는 `<body>` 끝 `<script>` 한 블록에만 둡니다(분산·인라인 style 전환 금지).
+
+## 2. CSS (그대로 복사)
+
+```css
+.rpt{--blue:#0000FF;--font:'Malgun Gothic','맑은 고딕',sans-serif;font-family:var(--font);background:#ededed;padding:1px 0;max-width:none}
+.rpt *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all}
+.rpt .stage{position:relative;width:1280px;max-width:none;height:720px;background:#fff;overflow:hidden;margin:20px auto;display:flex;flex-direction:column}
+.rpt .frame{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:15px 30px 0}
+.rpt .title{font-size:30px;font-weight:700;color:#000;margin-left:20px;padding-right:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt .rule-top{width:1209px;height:4px;background:#4F81BD;margin:11px auto 0}
+.rpt .gov{font-size:24px;font-weight:700;color:#000;margin:11px 0 0 20px;white-space:nowrap}
+.rpt .foot{font-size:13px;color:#000;margin:4px 0 0 36px}
+.rpt .sub{font-size:21px;color:#000;margin:12px 0 0 36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt .detail{font-size:19px;color:#000;margin:6px 0 0 52px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt .body{display:flex!important;flex-direction:row!important;flex-wrap:nowrap;gap:32px;margin:52px 27px 0;flex:1;min-height:0}
+.rpt .body.free{display:block!important;margin:32px 30px 0}
+.rpt .body.free .panel{flex:none;width:100%;height:100%;overflow:hidden}
+.rpt .body.free .panel~.panel{display:none}
+.rpt .body.free .ptitle{display:none}
+.rpt .body.free .pbody{padding:0;height:100%;overflow:hidden;border:none}
+.rpt .panel{flex:1;position:relative;min-width:0;min-height:0;overflow:visible}
+.rpt .pbody{border:1px solid #ccc;padding:24px 20px 26px;height:100%;overflow:hidden}
+.rpt .ptitle{display:flex;align-items:center;font-size:22px;font-weight:700;color:#000;white-space:nowrap;margin:0 0 10px}
+.rpt .ptitle .txt::before{content:"[ "}
+.rpt .ptitle .txt::after{content:" ]"}
+.rpt .ptitle .rule{flex:1;height:1px;background:#999;margin-left:10px}
+.rpt .l1{font-size:18px;color:#000;margin-top:14px;font-weight:700}
+.rpt .l2{font-size:16px;color:#000;margin:8px 0 0 18px}
+.rpt .l3{font-size:14px;color:#000;margin:6px 0 0 34px}
+.rpt .l1,.rpt .l2,.rpt .l3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt .b{color:var(--blue)}
+.rpt .t{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px}
+.rpt .t th,.rpt .t td{border:1px solid #ccc;padding:5px 8px;color:#000;text-align:center}
+.rpt .t th{background:#f2f2f2;color:#666}
+.rpt .num{text-align:right}
+.rpt .chart{display:flex;align-items:flex-end;gap:18px;height:140px;margin-top:18px}
+.rpt .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.rpt .bar{width:60%;background:#DCE6F2}
+.rpt .col.v .bar{background:#376092}
+.rpt .cap{font-size:12px;color:#666;margin-top:4px}
+.rpt .flow{display:flex;align-items:center;gap:8px;margin-top:18px}
+.rpt .step{flex:1;padding:10px 6px;text-align:center;font-size:13px;color:#000;background:#DCE6F2}
+.rpt .step.v{background:#376092;color:#fff;font-weight:700}
+.rpt .step.g{background:#e9e9e9}
+.rpt .ar{color:#666}
+.rpt .badge{position:absolute;top:15px;right:30px;width:95px;height:19px;border:1px solid #F00;color:#F00;font-size:12px;text-align:center;line-height:17px;cursor:pointer;z-index:50}
+.rpt .groupname{position:absolute;top:36px;right:30px;font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap}
+.rpt .footer{flex-shrink:0;height:76px;position:relative}
+.rpt .footer::before{content:"[회사 슬로건]";position:absolute;left:30px;bottom:0;height:38px;line-height:38px;font-size:13px;font-weight:700;color:var(--blue)}
+.rpt .endnote{position:absolute;left:30px;right:30px;top:22px;font-size:12px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt .rule-bot{position:absolute;left:20px;right:20px;height:1px;background:#ccc;top:38px}
+.rpt .pageno{position:absolute;left:0;right:0;bottom:0;height:38px;text-align:center;line-height:38px;font-size:12px;color:#888}
+.rpt .org{position:absolute;right:30px;bottom:0;height:38px;line-height:38px;font-size:12px;color:#888}
+.rpt .pre{background:#f5f5f5;border-left:3px solid #376092;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;color:#000;white-space:pre-wrap;margin-top:12px}
+.rpt .img{background:#eef2f7;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;overflow:hidden;margin-top:12px}
+.rpt .img img{width:100%;height:100%;object-fit:contain;display:block}
+.rpt .deck{width:1280px;max-width:none;margin:0 auto}
+.rpt .deck>.stage{margin:20px auto}
+.rpt.fs,.rpt:fullscreen,.rpt:-webkit-full-screen{max-width:none;background:#000;padding:0;margin:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.rpt.fs .stage,.rpt:fullscreen .stage,.rpt:-webkit-full-screen .stage{margin:0}
+.rpt .nav{position:absolute;top:0;bottom:0;width:10%;z-index:45;cursor:pointer}
+.rpt .nav.prev{left:0}
+.rpt .nav.next{right:0}
+```
+
+## 3. DOM 골격 (2단 기본형 — `[ ]`만 내용으로 교체)
+
+```html
+<div class="rpt">
+  <div class="stage">
+    <div class="frame">
+      <div class="title">[제목]</div>
+      <div class="rule-top"></div>
+      <div class="gov">□ [핵심 결론 한 문장]</div>
+      <div class="foot">* [약어·기준 각주]</div>
+      <div class="sub">- [결론을 보강하는 근거·범위 한 줄]</div>
+      <div class="detail">· [한 단계 더 들어간 세부 설명, 필요할 때만]</div>
+      <div class="body">
+        <!-- ★ body 1개, 그 안에 panel 2개(좌·우) 형제 -->
+        <div class="panel">
+          <div class="ptitle"><span class="txt">[패널1 제목]</span><span class="rule"></span></div>
+          <div class="pbody">
+            <div class="l1">□ [핵심 근거]</div>
+            <table class="t">
+              <thead><tr><th>[항목]</th><th>[현재]</th><th>[목표]</th></tr></thead>
+              <tbody>
+                <tr><td>[지표명]</td><td class="num">[값]</td><td class="num">[값]</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="ptitle"><span class="txt">[패널2 제목]</span><span class="rule"></span></div>
+          <div class="pbody"><div class="l1">□ [핵심 근거]</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="badge">CONFIDENTIAL</div>
+    <div class="groupname">[그룹명]</div>
+    <div class="footer">
+      <div class="endnote">* 기준: [출처/산식] / 약어 Full Name</div>
+      <div class="rule-bot"></div>
+      <div class="pageno">- 1 / 1 -</div>
+      <div class="org">[날짜] / [팀명] / [작성자]</div>
+    </div>
+  </div>
+</div>
+```
+
+`.badge`(예시 텍스트 "CONFIDENTIAL")는 항상 표시하고, 클릭하면 아래 스크립트가 전체화면을 토글합니다 — 별도 전체화면 버튼을 추가하지 않습니다. 텍스트는 자유롭게 바꿔도 되지만(예: "내부용", "DRAFT") 이 요소 자체를 지우지 않습니다.
+
+`.groupname`(대외비 배지 바로 아래, 우측 정렬)은 보고서마다 값이 바뀌는 자리입니다(부문/조직/그룹명 등).
+
+`.footer`의 좌측 하단 문구(`[회사 슬로건]`)는 CSS `content:`로 고정 삽입되므로 HTML에 별도 태그가 필요 없습니다 — 이 문구를 실제로 쓸 값으로 바꾸려면 CSS의 `.rpt .footer::before{content:"..."}` 한 곳만 고치면 되고, 모든 슬라이드에 항상 같은 자리·같은 값으로 나타납니다(콘텐츠 작성자가 실수로 빠뜨리거나 다르게 쓸 위험이 없음).
+
+패널 제목은 `.ptitle` 안에 `<span class="txt">텍스트</span><span class="rule"></span>` 두 자식을 그대로 유지합니다 — `.txt`의 대괄호는 CSS가 자동으로 붙이고(직접 입력 금지), `.rule`은 항상 빈 채로 두어 우측으로 뻗는 구분선 역할만 합니다.
+
+헤더 순서는 **제목 → 거버닝 → 각주(주석) → 부연설명 → 세부설명**입니다(각주가 거버닝 바로 아래, 부연설명보다 먼저 옵니다 — 순서를 바꾸지 않습니다). `.detail`은 꼭 필요할 때만 추가하는 선택 요소입니다.
+
+### 다단/전체활용 변형
+
+- **3단**: `.panel`을 3개 형제로 두면 flex가 자동으로 3분할합니다(추가 CSS 불필요).
+- **전체활용(패널 경계선 없이 폭 전체 사용)**: `<div class="body free">` 안에 `.panel` **1개만** 둡니다. 이때 `.ptitle`·테두리는 자동으로 숨겨집니다.
+- **다중 슬라이드(덱)**: `.stage`를 여러 개 나열하면(선택적으로 `.deck`으로 감싸도 됨) §5 스크립트가 한 장씩 넘겨보는 뷰어로 만들어 줍니다. 각 `.stage`는 `.frame`·`.badge`·`.footer`를 각자 포함해야 합니다.
+
+## 4. 시각화 — 전달력을 높이는 기본 도구 (제한이 아니라 권장)
+
+글로만 8줄을 채우는 것보다, 그중 비교·추이·절차에 해당하는 부분을 표·차트·플로우로 바꾸는 편이 훨씬 빨리 읽힙니다. "내용이 단조로워 보이면" 아래 세 도구부터 검토하세요 — 사용자가 명시적으로 요청해야만 쓰는 예외 취급이 아닙니다.
+
+- **비교·정리** → 표(`.t`). 셀은 짧은 단어·숫자만, 줄바꿈 금지, 숫자 칸은 `<td class="num">`.
+- **수치 비교(현재 vs 목표, A안 vs B안)** → `.chart`+`.col`(강조는 `.col.v`)+`.bar`(inline `style="height:NN%"`)+`.cap`.
+- **절차·단계·로드맵** → `.flow`+`.step`(강조는 `.step.v`, 흐린 단계는 `.step.g`).
+- **실제 사진·스크린샷**(증빙 등 표·차트로 대체할 수 없는 경우) → `.img` 컨테이너에 base64 `<img>`를 직접 심습니다. 예: `<div class="img" style="aspect-ratio:16/9;height:160px"><img src="data:image/png;base64,...."></div>`. 종횡비는 `style`의 `aspect-ratio`/`height`로 지정하고, 내부 `img{width:100%;height:100%;object-fit:contain}` 규칙이 찌그러짐을 막습니다.
+
+한 패널에 이 넷(표/차트/플로우/이미지) 중 **최대 1개**만 텍스트 계층과 함께 둡니다 — 여러 개를 쌓으면 고정 720px 높이를 넘어 잘립니다. 표현력을 높이고 싶다고 이 상한을 깨지 말고, 대신 슬라이드를 나누세요.
+
+## 5. 동작 스크립트 (그대로 복사, `</body>` 직전)
+
+좌/우 클릭·화살표·PageUp/Down·Space·마우스 휠로 슬라이드 이동, `.badge` 클릭으로 전체화면 토글(Esc 해제). 컨테이너가 1280px보다 좁으면 비율을 유지한 채 자동 축소됩니다. 클래스로 슬라이드를 찾아 인라인 스타일로 표시를 제어하므로 외부 CSS가 제거돼도 동작합니다. 스크립트가 막히면 모든 슬라이드가 세로로 나열되어 보입니다(빈 화면 없음).
+
+```html
+(function () {
+  var root = document.querySelector('.rpt');
+  if (!root) return;
+  var stages = [].slice.call(root.querySelectorAll('.stage'));
+  var i = 0;
+  function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement; }
+  function availWidth() {
+    var p = root.parentElement;
+    while (p && p.clientWidth === 0) p = p.parentElement;
+    var w = p ? p.clientWidth : root.clientWidth;
+    return w || 1280;
+  }
+  function render() {
+    var fs = fsEl() === root;
+    var avail = fs ? innerWidth : availWidth();
+    stages.forEach(function (s, j) {
+      s.style.display = (j === i) ? 'flex' : 'none';
+      if (fs) {
+        var k = Math.min(innerWidth / 1280, innerHeight / 720);
+        s.style.transformOrigin = 'center';
+        s.style.transform = (j === i) ? 'scale(' + k + ')' : '';
+        s.style.marginBottom = '';
+      } else {
+        var k2 = Math.min(1, avail / 1280);
+        s.style.transformOrigin = 'top left';
+        s.style.transform = (k2 < 1) ? 'scale(' + k2 + ')' : '';
+        s.style.marginBottom = (k2 < 1) ? (720 * k2 - 720) + 'px' : '';
+      }
+    });
+  }
+  function go(n) {
+    if (stages.length) {
+      i = (n + stages.length) % stages.length;
+      render();
+    }
+  }
+  function toggleFs() {
+    try {
+      if (fsEl() === root) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+    } catch (e) {}
+  }
+  if (stages.length > 1) {
+    stages.forEach(function (s) {
+      [['prev', -1], ['next', 1]].forEach(function (d) {
+        var z = document.createElement('div');
+        z.className = 'nav ' + d[0];
+        z.addEventListener('click', function (e) { e.stopPropagation(); go(i + d[1]); });
+        s.appendChild(z);
+      });
+    });
+  }
+  root.tabIndex = -1;
+  root.addEventListener('mousedown', function () { try { root.focus(); } catch (e) {} });
+  root.addEventListener('click', function (e) {
+    if (e.target.closest('.badge')) { e.preventDefault(); e.stopPropagation(); toggleFs(); }
+  });
+  function onKey(e) {
+    var el = e.target;
+    if (el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable)) return;
+    var k = e.key;
+    if (k === ' ' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown') { e.preventDefault(); go(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(stages.length - 1); }
+    else if (k === 'f' || k === 'F') { e.preventDefault(); toggleFs(); }
+  }
+  root.addEventListener('keydown', onKey);
+  document.addEventListener('keydown', function (e) { if (fsEl() === root) onKey(e); });
+  if (stages.length > 1) {
+    var wheelLock = false;
+    root.addEventListener('wheel', function (e) {
+      if (fsEl() !== root && !root.contains(document.activeElement)) return;
+      e.preventDefault();
+      if (wheelLock) return;
+      wheelLock = true;
+      setTimeout(function () { wheelLock = false; }, 450);
+      go(i + (e.deltaY > 0 ? 1 : -1));
+    }, { passive: false });
+  }
+  document.addEventListener('fullscreenchange', render);
+  document.addEventListener('webkitfullscreenchange', render);
+  window.addEventListener('resize', render);
+  render();
+})();
+```
+
+## 6. 출력 전 자가 검증
+
+- CSS가 `<head><style>` 1블록, 스크립트가 `<body>` 끝 1블록(둘 다 원문 그대로), class명 정확.
+- 표는 `<table class="t">`(+`th`/`td`) 태그인가 — `<div class="t">`면 표로 안 보임.
+- 본문이 좌우 다단 유지(패널이 위아래로 쌓이지 않음), `.stage` 1280×720, 화면 밖으로 나간 요소 없음, `.footer` 영역을 본문이 침범하지 않음.
+- 제목·거버닝·부연·세부·`.l1~.l3` 각 한 줄이 잘리지 않는가(아래 CONTENT_GUIDE.md의 글자수 한도 참고). 넘치면 `...`·생략이 아니라 더 짧게 다시 쓰거나 슬라이드를 나눈다.
+- 각 패널 내용이 패널 높이를 넘지 않는가(패널 하단이 `.footer` 선에 걸려 잘리지 않는가). 넘치면 항목을 줄이거나 슬라이드를 나눈다(폰트 축소·말줄임 금지).
+- `.badge`·`.groupname`·`.footer`의 브랜드 슬로건(`::before`)이 모두 표시되는가(하나라도 숨겨지거나 다른 요소에 가려지지 않았는가). 헤더 순서가 제목→거버닝→각주→부연→세부인가.
