@@ -53,13 +53,19 @@
 
 | 레이아웃 | `.pbody` `clientHeight` | 컴포넌트가 실제 쓸 수 있는 콘텐츠 높이 |
 |---|---|---|
-| 2단/3단 기본형(`.panel`에 테두리·`ptitle` 있음) | 416px | 366px (상하 padding 24+26 제외) |
-| 전체활용(`.body.free`, 테두리·`ptitle` 없음) | 514px | 514px (padding 0) |
+| 2단/3단 기본형(`.panel`에 테두리·`ptitle` 있음, `.detail` 없음 기준) | 416px | 366px (상하 padding 24+26 제외) |
+| 전체활용(`.body.free`, 테두리·`ptitle` 없음, `.detail` 없음 기준) | 514px | 514px (padding 0) |
 
-아래 §2 컴포넌트는 모두 기본형(더 좁은 366px 기준)에서, **권장 상한보다 더 많이 채운 스트레스
-케이스**(KPI 4칸+텍스트 4줄, 매트릭스 4분면×2줄씩)로 검증했고 여유(약 130~150px)가 남았습니다 —
-아래 표기된 "권장 상한"은 한계치가 아니라 **안전 여유를 둔 권장치**입니다. 한계치까지 채우도록
-유도하지 않는 이유는 `CONTENT_GUIDE.md` §6의 "허전함과 잘림 둘 다 방지" 원칙과 동일합니다.
+위 수치는 `.detail`(선택 요소)이 없는 헤더 기준입니다 — `.detail`을 추가하면 본문 쪽 높이가
+그만큼(대략 25px 안팎) 줄어듭니다. 아래 §2 컴포넌트는 모두 더 좁은 366px 기준에서, **권장 상한보다
+더 많이 채운 스트레스 케이스**(KPI 4칸+텍스트 4줄, 매트릭스 4분면×2줄씩)로 검증했고 여유(약
+130~150px)가 남았습니다 — `.detail` 유무에 따른 25px 정도는 이 여유 안에서 흡수됩니다.
+
+**단, 아래 컴포넌트별 "용량 상한"은 실측한 한계치가 아니라 권장치입니다.** 글자수 상한(예:
+콜아웃 줄당 34자, 타임라인 라벨 14자)은 렌더 테스트를 실제로 그 글자수까지 채워서 검증한 값이
+아니라, 기존 `.l1`~`.l3`/`.ptitle` 글자수 한도(`CONTENT_GUIDE.md` §7)와 실제 검증한 항목
+개수(타일 4개, 분면 4개 등)로부터 유추한 안전한 시작값입니다. 실사용 중 잘림이 보이면 더 보수적인
+값으로 조정하세요 — 이 표는 "정답"이 아니라 "권장 출발점"입니다.
 
 ## 1. 이 카탈로그가 바꾸지 않는 것
 
@@ -84,7 +90,7 @@
 .rpt .kpi{display:flex;gap:14px;margin-top:14px}
 .rpt .kpi .item{flex:1;border:1px solid #ccc;padding:14px 10px;text-align:center}
 .rpt .kpi .item.v{border-color:#376092;background:#EEF2F7}
-.rpt .kpi .num{font-size:28px;font-weight:700;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt .kpi .num{font-size:28px;font-weight:700;color:#000;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rpt .kpi .item.v .num{color:#376092}
 .rpt .kpi .lbl{font-size:13px;color:#666;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 ```
@@ -178,10 +184,13 @@
   `.t`/`.chart`/`.flow`/`.img`(기존) + `.kpi`/`.matrix`/`.tl`(신규) — 이 7종 중 하나만 고릅니다.
 - 따라서 한 패널에 "텍스트 계층 1개(`.l1` 등, 또는 `.callout`) + 시각화 계층 1개"까지가 표준
   조합입니다. §0 실측 스트레스 테스트도 이 조합(콜아웃 1 + 매트릭스 1)으로 검증했습니다.
-- 클래스 충돌 없음 확인: 신규 클래스(`kpi`/`item`/`lbl`/`delta`/`callout`/`stripe`/`matrix`/`row`/
-  `quad`/`qh`/`qi`/`tl`/`pt`/`date`/`dot`)는 기존 클래스와 겹치지 않습니다. `.num`은 기존 표
-  전용(우측정렬) 의미를 그대로 공유해 재사용했고(다른 서브트리라 충돌 안 함), `.v`도 기존 "강조"
-  의미를 그대로 재사용했습니다 — 새 의미를 만들지 않았습니다.
+- 클래스 충돌 검토: 신규 클래스(`kpi`/`item`/`lbl`/`callout`/`stripe`/`matrix`/`row`/`quad`/`qh`/
+  `qi`/`tl`/`pt`/`date`/`dot`)는 기존 클래스와 이름이 겹치지 않습니다. `.v`는 기존 `.col.v`/
+  `.step.v`(강조)와 같은 의미로 재사용했습니다. **`.num`은 재사용하지 않고 별도 규칙으로
+  분리했습니다** — 기존 `.rpt .num{text-align:right}`(표 숫자 셀 전용, 우측정렬)과 KPI 타일의
+  숫자(가운데 정렬)는 정렬 의미가 반대라, `.rpt .kpi .num`에 `text-align:center`를 명시로 넣어
+  더 높은 특이도로 덮어씁니다(선택자 특이도상 항상 이깁니다). 클래스명은 같지만 규칙은 분리돼
+  있다는 점에 주의 — `DESIGN_SYSTEM.md`에 최종 병합할 때 이 분리를 유지해야 합니다.
 
 ## 4. 검증 방법 (재현 가능)
 
